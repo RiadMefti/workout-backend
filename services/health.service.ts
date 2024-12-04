@@ -1,5 +1,3 @@
-import { ApiError } from "../middlewares/error.middleware";
-
 class HealthService {
   constructor() {}
 
