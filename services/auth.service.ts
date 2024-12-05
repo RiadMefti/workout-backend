@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { CreateApiError } from "../utils/helpers";
+import { UserDTO } from "../types/user.types";
 class AuthService {
   constructor() {}
 
@@ -9,11 +10,28 @@ class AuthService {
     return false;
   }
 
-  public registerUser() {}
+  public async registerUser(
+    name: string,
+    email: string,
+    password: string,
+  ): Promise<UserDTO> {
+    const hashed_password = await this.hashPassword(password);
 
-  public getUserHashPassowrd() {}
+    // #TODO add it to db
 
-  public async hashPassowrd(password: string) {
+    const user: UserDTO = {
+      id: "someId",
+      name,
+      profile_picture: "Default",
+      email,
+    };
+
+    return user;
+  }
+
+  public getUserHashPassword() {}
+
+  public async hashPassword(password: string) {
     const hash = await Bun.password.hash(password);
     return hash;
   }
