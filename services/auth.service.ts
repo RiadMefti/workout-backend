@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { CreateApiError } from "../utils/helpers";
 import { UserDTO } from "../types/user.types";
+import { ApiError } from "../middlewares/error.middleware";
 class AuthService {
   constructor() {}
 
@@ -8,6 +9,29 @@ class AuthService {
   public userExists(email: string): boolean {
     //check in db if user exists
     return false;
+  }
+
+  public async loginUser(email: string, password: string): Promise<UserDTO> {
+    const hashed_password = await this.hashPassword(password);
+    //call DB to get the password
+    const db_hashed_password = "normaly_pwd_here";
+
+    const isPasswordSimilare = await this.verifyPassword(
+      db_hashed_password,
+      hashed_password,
+    );
+    if (!isPasswordSimilare) {
+      throw new ApiError(401, "Your password or email is WRONG ");
+    }
+
+    const user: UserDTO = {
+      email,
+      profile_picture: "Default",
+      name: "some name",
+      id: "some id",
+    };
+
+    return user;
   }
 
   public async registerUser(
