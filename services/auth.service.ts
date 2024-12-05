@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { CreateApiError } from "../utils/helpers";
 import { UserDTO } from "../types/user.types";
 import { ApiError } from "../middlewares/error.middleware";
+import { User } from "../schemas/user.schema";
 class AuthService {
   constructor() {}
 
@@ -14,24 +15,16 @@ class AuthService {
   public async loginUser(email: string, password: string): Promise<UserDTO> {
     const hashed_password = await this.hashPassword(password);
     //call DB to get the password
-    const db_hashed_password = "normaly_pwd_here";
 
-    const isPasswordSimilare = await this.verifyPassword(
-      db_hashed_password,
-      hashed_password,
-    );
-    if (!isPasswordSimilare) {
-      throw new ApiError(401, "Your password or email is WRONG ");
+    const user = await User.findOne({
+      email: email,
+    });
+
+    if (!user) throw new ApiError(404, "The user doesnt exist");
+    if (user.login(hashed_password)) {
+      return user.toDTO();
     }
-
-    const user: UserDTO = {
-      email,
-      profile_picture: "Default",
-      name: "some name",
-      id: "some id",
-    };
-
-    return user;
+    throw new ApiError(401, "Wrong Credentials");
   }
 
   public async registerUser(
@@ -44,7 +37,7 @@ class AuthService {
     // #TODO add it to db
 
     const user: UserDTO = {
-      id: "someId",
+      _id: "someId",
       name,
       profile_picture: "Default",
       email,
