@@ -8,14 +8,42 @@ class AuthController {
   public async register(req: Request, res: Response): Promise<void> {
     const { name, email, password } = req.body;
 
-    const data = authService.registerUser(name, email, password);
-    CreateApiSuccess(data, 201, res);
+    const data = await authService.registerUser(name, email, password);
+    const jwt = authService.createJWT(data);
+
+    CreateApiSuccess(
+      {
+        token: jwt,
+        expiresIn: 7200,
+        tokenType: "Bearer",
+        authState: {
+          email: data.email,
+          name: data.name,
+        },
+      },
+      201,
+      res,
+    );
   }
   public async login(req: Request, res: Response): Promise<void> {
     const { email, password } = req.body;
 
-    const data = authService.loginUser(email, password);
-    CreateApiSuccess(data, 201, res);
+    const data = await authService.loginUser(email, password);
+    const jwt = authService.createJWT(data);
+
+    CreateApiSuccess(
+      {
+        token: jwt,
+        expiresIn: 7200,
+        tokenType: "Bearer",
+        authState: {
+          email: data.email,
+          name: data.name,
+        },
+      },
+      201,
+      res,
+    );
   }
 }
 

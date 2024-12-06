@@ -10,8 +10,8 @@ const userSchema = new mongoose.Schema(
   },
   {
     methods: {
-      login(password: string): boolean {
-        if (this.hashed_password === password) {
+      async login(password: string): Promise<boolean> {
+        if (await Bun.password.verify(password, this.hashed_password)) {
           return true;
         }
         return false;
