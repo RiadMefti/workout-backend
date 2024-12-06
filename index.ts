@@ -4,6 +4,8 @@ import { ApiError, ErrorHandler } from "./middlewares/error.middleware";
 import { Authorization } from "./middlewares/authorization.middleware";
 import logger from "./utils/logger";
 import mongoose from "mongoose";
+
+import cors from "cors";
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -15,6 +17,16 @@ try {
 } catch (err) {
   throw new ApiError(500, "error connecting");
 }
+app.use(
+  cors({
+    origin: "*", // Allow all origins
+    methods: "*", // Allow all methods
+    allowedHeaders: "*", // Allow all headers
+    credentials: true, // Allow credentials
+    preflightContinue: true, // Pass through preflight
+    optionsSuccessStatus: 200, // Some legacy browsers need this
+  }),
+);
 // Use morgan to log requests
 app.use(logger);
 
