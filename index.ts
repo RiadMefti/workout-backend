@@ -9,6 +9,8 @@ import cors from "cors";
 const app = express();
 const port = process.env.PORT || 8080;
 
+
+//connecting to mongoose client
 try {
   const connexion_string = process.env.MONGO_DB || "";
   mongoose.connect(connexion_string, {
