@@ -3,10 +3,10 @@ import { UserDTO } from "../types/user.types";
 
 const userSchema = new mongoose.Schema(
   {
-    email: { type: "String", required: true },
-    name: { type: "String", required: true },
-    hashed_password: { type: "String", required: true },
-    profile_picture: { type: "String", default: "default" },
+    email: { type: String, required: true },
+    name: { type: String, required: true },
+    hashed_password: { type: String, required: true },
+    profile_picture: { type: String, default: "default" },
   },
   {
     methods: {
