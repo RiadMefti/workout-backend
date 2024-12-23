@@ -1,17 +1,16 @@
 import { Request, Response } from "express";
 import { CreateApiSuccess, CreateApiError } from "../utils/helpers";
 import { Workout } from "../schemas/workout.schema";
+import { createWorkoutSchema, updateWorkoutSchema } from "../zod/workout.zod";
 
 class WorkoutController {
   constructor() { }
 
-
-  //get all the workouts
   public async getWorkouts(req: Request, res: Response): Promise<void> {
     const workouts = await Workout.find({ user: req.user._id });
     CreateApiSuccess(workouts.map(w => w.toDTO()), 200, res);
   }
-  //get a workout by id
+
   public async getWorkout(req: Request, res: Response): Promise<void> {
     const workout = await Workout.findOne({
       _id: req.params.id,
@@ -26,8 +25,14 @@ class WorkoutController {
   }
 
   public async createWorkout(req: Request, res: Response): Promise<void> {
+    const result = createWorkoutSchema.safeParse(req.body);
+
+    if (!result.success) {
+      return CreateApiError(result.error.errors[0].message, 400, res);
+    }
+
     const workout = new Workout({
-      ...req.body,
+      ...result.data,
       user: req.user._id
     });
 
@@ -36,6 +41,12 @@ class WorkoutController {
   }
 
   public async editWorkout(req: Request, res: Response): Promise<void> {
+    const result = updateWorkoutSchema.safeParse(req.body);
+
+    if (!result.success) {
+      return CreateApiError(result.error.errors[0].message, 400, res);
+    }
+
     const workout = await Workout.findOne({
       _id: req.params.id,
       user: req.user._id
@@ -45,7 +56,7 @@ class WorkoutController {
       return CreateApiError("Workout not found", 404, res);
     }
 
-    const updated = await workout.edit(req.body);
+    const updated = await workout.edit(result.data);
     CreateApiSuccess(updated, 200, res);
   }
 
@@ -63,5 +74,5 @@ class WorkoutController {
     CreateApiSuccess({ message: "Deleted" }, 200, res);
   }
 }
-
 export const workoutController = new WorkoutController();
+
