@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema(
           name: this.name,
           email: this.email,
           profile_picture: this.profile_picture,
+          next_workout: this.next_workout ? this.next_workout.toString() : null,
         };
       },
     },
