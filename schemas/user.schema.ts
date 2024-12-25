@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true },
     hashed_password: { type: String, required: true },
     profile_picture: { type: String, default: "default" },
+    next_workout: { type: mongoose.Schema.Types.ObjectId, ref: 'Workout', default: null },
+
   },
   {
     methods: {
