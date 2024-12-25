@@ -1,27 +1,30 @@
 import { Request, Response } from "express";
 import { CreateApiSuccess, CreateApiError } from "../utils/helpers";
-import { Workout } from "../schemas/workout.schema";
+import { workoutService } from "../services/workout.service";
 import { createWorkoutSchema, updateWorkoutSchema } from "../zod/workout.zod";
 
 class WorkoutController {
   constructor() { }
 
   public async getWorkouts(req: Request, res: Response): Promise<void> {
-    const workouts = await Workout.find({ user: req.user._id });
-    CreateApiSuccess(workouts.map(w => w.toDTO()), 200, res);
+    try {
+      const workouts = await workoutService.getWorkouts(req.user._id);
+      CreateApiSuccess(workouts, 200, res);
+    } catch (error) {
+      CreateApiError("Failed to fetch workouts", 500, res);
+    }
   }
 
   public async getWorkout(req: Request, res: Response): Promise<void> {
-    const workout = await Workout.findOne({
-      _id: req.params.id,
-      user: req.user._id
-    });
-
-    if (!workout) {
-      return CreateApiError("Workout not found", 404, res);
+    try {
+      const workout = await workoutService.getWorkout(req.params.id, req.user._id);
+      CreateApiSuccess(workout, 200, res);
+    } catch (error) {
+      if (error instanceof Error && error.message === "Workout not found") {
+        return CreateApiError("Workout not found", 404, res);
+      }
+      CreateApiError("Failed to fetch workout", 500, res);
     }
-
-    CreateApiSuccess(workout.toDTO(), 200, res);
   }
 
   public async createWorkout(req: Request, res: Response): Promise<void> {
@@ -31,13 +34,12 @@ class WorkoutController {
       return CreateApiError(result.error.errors[0].message, 400, res);
     }
 
-    const workout = new Workout({
-      ...result.data,
-      user: req.user._id
-    });
-
-    await workout.save();
-    CreateApiSuccess(workout.toDTO(), 201, res);
+    try {
+      const workout = await workoutService.createWorkout(result.data, req.user._id);
+      CreateApiSuccess(workout, 201, res);
+    } catch (error) {
+      CreateApiError("Failed to create workout", 500, res);
+    }
   }
 
   public async editWorkout(req: Request, res: Response): Promise<void> {
@@ -47,32 +49,28 @@ class WorkoutController {
       return CreateApiError(result.error.errors[0].message, 400, res);
     }
 
-    const workout = await Workout.findOne({
-      _id: req.params.id,
-      user: req.user._id
-    });
-
-    if (!workout) {
-      return CreateApiError("Workout not found", 404, res);
+    try {
+      const updated = await workoutService.editWorkout(req.params.id, req.user._id, result.data);
+      CreateApiSuccess(updated, 200, res);
+    } catch (error) {
+      if (error instanceof Error && error.message === "Workout not found") {
+        return CreateApiError("Workout not found", 404, res);
+      }
+      CreateApiError("Failed to update workout", 500, res);
     }
-
-    const updated = await workout.edit(result.data);
-    CreateApiSuccess(updated, 200, res);
   }
 
   public async deleteWorkout(req: Request, res: Response): Promise<void> {
-    const workout = await Workout.findOne({
-      _id: req.params.id,
-      user: req.user._id
-    });
-
-    if (!workout) {
-      return CreateApiError("Workout not found", 404, res);
+    try {
+      await workoutService.deleteWorkout(req.params.id, req.user._id);
+      CreateApiSuccess({ message: "Workout deleted successfully" }, 200, res);
+    } catch (error) {
+      if (error instanceof Error && error.message === "Workout not found") {
+        return CreateApiError("Workout not found", 404, res);
+      }
+      CreateApiError("Failed to delete workout", 500, res);
     }
-
-    await workout.delete();
-    CreateApiSuccess({ message: "Deleted" }, 200, res);
   }
 }
-export const workoutController = new WorkoutController();
 
+export const workoutController = new WorkoutController();
