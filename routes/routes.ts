@@ -1,6 +1,7 @@
 import { Router, NextFunction, Response, Request } from "express";
 import healthRoutes from "./health.route";
 import workoutRoutes from "./workout.route";
+import workoutManagerRoutes from "./workout-manager.route";
 import { ApiError } from "../middlewares/error.middleware";
 import authRoutes from "./auth.route";
 const router = Router();
@@ -8,7 +9,8 @@ const router = Router();
 //all the routes
 router.use("/health", healthRoutes);
 router.use("/auth", authRoutes);
-router.use("/workout", workoutRoutes)
+router.use("/workout", workoutRoutes);
+router.use("/workout-manager", workoutManagerRoutes)
 // 404 middleware for non-existant routes
 router.use((req: Request) => {
   throw new ApiError(404, "Not Found");
