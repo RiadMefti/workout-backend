@@ -24,9 +24,6 @@ app.use(
     origin: "*", // Allow all origins
     methods: "*", // Allow all methods
     allowedHeaders: "*", // Allow all headers
-    credentials: true, // Allow credentials
-    preflightContinue: true, // Pass through preflight
-    optionsSuccessStatus: 200, // Some legacy browsers need this
   }),
 );
 // Use morgan to log requests
