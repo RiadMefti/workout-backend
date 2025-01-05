@@ -1,18 +1,23 @@
-// DTO type
 export type WorkoutDTO = {
   id: string;
   name: string;
-  description?: string;
-  exercises: Array<{
-    name: string;
-    type: 'strength' | 'cardio';
-    sets?: number;
-    reps?: number;
-    duration?: number;
-    distance?: number;
-  }>;
-}
+  exercises: ExerciceDTO[];
+};
+export type ExerciceDTO = {
+  name: string;
+  type: "strength" | "cardio";
+  sets?: number | undefined;
+  reps?: number | undefined;
+  duration?: number | undefined;
+  distance?: number | undefined;
+};
 
+export type WorkoutSplitDTO = {
+  id: string;
+  name: string;
+  description: string;
+  workouts: Array<WorkoutDTO>;
+};
 
 export type WorkoutRecordDTO = {
   id: string;
@@ -20,11 +25,10 @@ export type WorkoutRecordDTO = {
   date: Date;
   exercises: Array<{
     name: string;
-    type: 'strength' | 'cardio';
+    type: "strength" | "cardio";
     bestReps?: number;
     bestWeight?: number;
     duration?: number;
     distance?: number;
   }>;
 };
-

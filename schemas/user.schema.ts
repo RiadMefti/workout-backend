@@ -7,8 +7,12 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true },
     hashed_password: { type: String, required: true },
     profile_picture: { type: String, default: "default" },
-    next_workout: { type: mongoose.Schema.Types.ObjectId, ref: 'Workout', default: null },
-
+    active_split: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "WorkoutSplit",
+      default: null,
+    },
+    next_workout_index: { type: Number, default: 0 },
   },
   {
     methods: {
@@ -24,11 +28,17 @@ const userSchema = new mongoose.Schema(
           name: this.name,
           email: this.email,
           profile_picture: this.profile_picture,
-          next_workout: this.next_workout ? this.next_workout.toString() : null,
+          active_split: this.active_split ? this.active_split.toString() : null,
         };
       },
+      getActiveSplit(): string | null {
+        return this.active_split ? this.active_split.toString() : null;
+      },
+      getNextWorkoutIndex(): number {
+        return this.next_workout_index;
+      },
     },
-  },
+  }
 );
 export type User = mongoose.InferSchemaType<typeof userSchema>;
 export const User = mongoose.model("User", userSchema);

@@ -1,6 +1,6 @@
 import { Router, NextFunction, Response, Request } from "express";
 import healthRoutes from "./health.route";
-import workoutRoutes from "./workout.route";
+import workoutRoutes from "./workout-split.route";
 import workoutManagerRoutes from "./workout-manager.route";
 import { ApiError } from "../middlewares/error.middleware";
 import authRoutes from "./auth.route";
