@@ -22,41 +22,24 @@ class WorkoutSplitController {
   }
 
   /**
-   * Get a specific workout split
-   */
-  public async getWorkoutSplit(req: Request, res: Response): Promise<void> {
-    try {
-      const split = await workoutSplitService.getWorkoutSplit(
-        req.params.id,
-        req.user._id
-      );
-      CreateApiSuccess(split, 200, res);
-    } catch (error) {
-      if (
-        error instanceof Error &&
-        error.message === "Workout split not found"
-      ) {
-        return CreateApiError("Workout split not found", 404, res);
-      }
-      CreateApiError("Failed to fetch workout split", 500, res);
-    }
-  }
-
-  /**
    * Get active split for a user
    */
 
   public async getActiveSplit(req: Request, res: Response): Promise<void> {
+    console.log("getting active split");
     try {
       const activeSplit = await workoutSplitService.getActiveSplit(
         req.user._id
       );
       CreateApiSuccess(activeSplit, 200, res);
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof Error && error.message === "User not found") {
         return CreateApiError("User not found", 404, res);
       }
-      CreateApiError("Failed to fetch active split", 500, res);
+
+      console.log(error.message);
+
+      CreateApiError(error.message as string, 500, res);
     }
   }
 
@@ -66,8 +49,11 @@ class WorkoutSplitController {
 
   public async setActiveSplit(req: Request, res: Response): Promise<void> {
     try {
-      await workoutSplitService.setActiveSplit(req.params.id, req.user._id);
-      CreateApiSuccess({ message: "Active split set successfully" }, 200, res);
+      await workoutSplitService.setActiveSplit(
+        req.params.splitId,
+        req.user._id
+      );
+      CreateApiSuccess({ message: "Active split set successfully" }, 201, res);
     } catch (error) {
       if (
         error instanceof Error &&

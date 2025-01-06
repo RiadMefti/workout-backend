@@ -38,7 +38,7 @@ class WorkoutSplitService {
    */
 
   public async getActiveSplit(userId: string): Promise<string | null> {
-    const user = await User.findById(userId).populate("active_split").exec();
+    const user = await User.findById(userId).exec();
 
     if (!user) {
       throw new Error("User not found");
@@ -57,8 +57,7 @@ class WorkoutSplitService {
     if (!user) {
       throw new Error("User not found");
     }
-
-    user.active_split = new mongoose.Types.ObjectId(splitId);
+    await user.setActiveSplit(splitId);
     await user.save();
 
     return;
