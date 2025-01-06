@@ -6,8 +6,6 @@ interface WorkoutRecordMethods {
   toDTO(): WorkoutRecordDTO;
 }
 
-
-
 // Interface for WorkoutRecord document
 interface WorkoutRecordDocument extends Document, WorkoutRecordMethods {
   _id: mongoose.Types.ObjectId;
@@ -16,7 +14,7 @@ interface WorkoutRecordDocument extends Document, WorkoutRecordMethods {
   date: Date;
   exercises: Array<{
     name: string;
-    type: 'strength' | 'cardio';
+    type: "strength" | "cardio";
     bestReps?: number;
     bestWeight?: number;
     duration?: number;
@@ -25,21 +23,31 @@ interface WorkoutRecordDocument extends Document, WorkoutRecordMethods {
 }
 
 // Interface for WorkoutRecord model
-interface WorkoutRecordModel extends Model<WorkoutRecordDocument> { }
+interface WorkoutRecordModel extends Model<WorkoutRecordDocument> {}
 
-const workoutRecordSchema = new Schema<WorkoutRecordDocument, WorkoutRecordModel, WorkoutRecordMethods>(
+const workoutRecordSchema = new Schema<
+  WorkoutRecordDocument,
+  WorkoutRecordModel,
+  WorkoutRecordMethods
+>(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    workout: { type: Schema.Types.ObjectId, ref: 'Workout', required: true },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    workout: {
+      type: Schema.Types.ObjectId,
+      ref: "WorkoutSplit",
+      required: true,
+    },
     date: { type: Date, required: true, default: Date.now },
-    exercises: [{
-      name: { type: String, required: true },
-      type: { type: String, enum: ['strength', 'cardio'], required: true },
-      bestReps: { type: Number },
-      bestWeight: { type: Number },
-      duration: { type: Number },
-      distance: { type: Number }
-    }]
+    exercises: [
+      {
+        name: { type: String, required: true },
+        type: { type: String, enum: ["strength", "cardio"], required: true },
+        bestReps: { type: Number },
+        bestWeight: { type: Number },
+        duration: { type: Number },
+        distance: { type: Number },
+      },
+    ],
   },
   {
     methods: {
@@ -48,21 +56,21 @@ const workoutRecordSchema = new Schema<WorkoutRecordDocument, WorkoutRecordModel
           id: this._id.toString(),
           workoutId: this.workout.toString(),
           date: this.date,
-          exercises: this.exercises.map(exercise => ({
+          exercises: this.exercises.map((exercise) => ({
             name: exercise.name,
-            type: exercise.type as 'strength' | 'cardio',
+            type: exercise.type as "strength" | "cardio",
             bestReps: exercise.bestReps || undefined,
             bestWeight: exercise.bestWeight || undefined,
             duration: exercise.duration || undefined,
-            distance: exercise.distance || undefined
-          }))
+            distance: exercise.distance || undefined,
+          })),
         };
-      }
+      },
     },
   }
 );
 
-export const WorkoutRecord = mongoose.model<WorkoutRecordDocument, WorkoutRecordModel>(
-  "WorkoutRecord",
-  workoutRecordSchema
-);
+export const WorkoutRecord = mongoose.model<
+  WorkoutRecordDocument,
+  WorkoutRecordModel
+>("WorkoutRecord", workoutRecordSchema);

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { CreateApiSuccess, CreateApiError } from "../utils/helpers";
 import { workoutManager } from "../services/workout-manager.service";
 import { createWorkoutRecordSchema } from "../zod/workout-manager.zod";
+import { WorkoutRecordDTO } from "../types/workout.types";
 
 class WorkoutManagerController {
   public async getAllUserWorkouts(req: Request, res: Response): Promise<void> {
@@ -35,7 +36,8 @@ class WorkoutManagerController {
     req: Request,
     res: Response
   ): Promise<void> {
-    const result = createWorkoutRecordSchema.safeParse(req.body);
+    const result = createWorkoutRecordSchema.safeParse(req.body.workoutRecord);
+
     if (!result.success) {
       return CreateApiError(result.error.errors[0].message, 400, res);
     }
@@ -43,8 +45,7 @@ class WorkoutManagerController {
     try {
       const workoutRecord = await workoutManager.postUserActiveWorkout(
         req.user._id,
-        result.data.workoutId,
-        { exercises: result.data.exercises }
+        req.body.workoutRecord
       );
       CreateApiSuccess(workoutRecord, 201, res);
     } catch (error) {
