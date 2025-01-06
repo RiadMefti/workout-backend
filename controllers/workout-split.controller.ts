@@ -26,7 +26,6 @@ class WorkoutSplitController {
    */
 
   public async getActiveSplit(req: Request, res: Response): Promise<void> {
-    console.log("getting active split");
     try {
       const activeSplit = await workoutSplitService.getActiveSplit(
         req.user._id

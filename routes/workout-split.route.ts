@@ -13,7 +13,7 @@ router.get(
   "/next-workout-index",
   HandleError(workoutSplitController.getUserNextWorkoutIndex)
 );
-router.put(
+router.post(
   "/next-workout-index/:index",
   HandleError(workoutSplitController.incrementUserNextWorkoutIndex)
 );

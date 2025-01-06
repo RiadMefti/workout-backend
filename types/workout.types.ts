@@ -1,5 +1,5 @@
 export type WorkoutDTO = {
-  id: string;
+  id?: string;
   name: string;
   exercises: ExerciceDTO[];
 };

@@ -28,7 +28,7 @@ const ExerciseSchema = z
 
 // Define Workout Schema
 const WorkoutSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   name: z.string().min(1, "Workout name is required"),
   exercises: z
     .array(ExerciseSchema)
@@ -44,7 +44,7 @@ export const CreateWorkoutSplitSchema = z.object({
 
 // Define Update Workout Split Schema
 export const UpdateWorkoutSplitSchema = z.object({
-  id: z.string(), // Required for updates
+  id: z.string().optional(), // Required for updates
   name: z.string().optional(),
   description: z.string().optional(),
   workouts: z.array(WorkoutSchema).optional(),
