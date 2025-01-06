@@ -13,7 +13,7 @@ const exerciseSchema = z.object({
 });
 
 export const createWorkoutRecordSchema = z.object({
-  workoutId: z.string().min(1, "Workout ID is required"),
+  workoutName: z.string().min(1, "Workout name is required"),
   exercises: z
     .array(exerciseSchema)
     .min(1, "At least one exercise is required"),

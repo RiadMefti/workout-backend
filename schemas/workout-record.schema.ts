@@ -10,7 +10,7 @@ interface WorkoutRecordMethods {
 interface WorkoutRecordDocument extends Document, WorkoutRecordMethods {
   _id: mongoose.Types.ObjectId;
   user: mongoose.Types.ObjectId;
-  workout: mongoose.Types.ObjectId;
+  workoutName: string;
   date: Date;
   exercises: Array<{
     name: string;
@@ -32,9 +32,8 @@ const workoutRecordSchema = new Schema<
 >(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    workout: {
-      type: Schema.Types.ObjectId,
-      ref: "WorkoutSplit",
+    workoutName: {
+      type: String,
       required: true,
     },
     date: { type: Date, required: true, default: Date.now },
@@ -54,7 +53,7 @@ const workoutRecordSchema = new Schema<
       toDTO() {
         return {
           id: this._id.toString(),
-          workoutId: this.workout.toString(),
+          workoutName: this.workoutName,
           date: this.date,
           exercises: this.exercises.map((exercise) => ({
             name: exercise.name,

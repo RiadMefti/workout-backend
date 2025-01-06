@@ -21,7 +21,7 @@ export type WorkoutSplitDTO = {
 
 export type WorkoutRecordDTO = {
   id: string;
-  workoutId: string;
+  workoutName: string;
   date: Date;
   exercises: Array<{
     name: string;

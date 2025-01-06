@@ -48,14 +48,8 @@ class WorkoutManagerController {
         req.body.workoutRecord
       );
       CreateApiSuccess(workoutRecord, 201, res);
-    } catch (error) {
-      if (
-        error instanceof Error &&
-        error.message === "Invalid userId or workoutId"
-      ) {
-        return CreateApiError("Invalid workout ID", 400, res);
-      }
-      CreateApiError("Failed to create workout record", 500, res);
+    } catch (error: any) {
+      CreateApiError(error.message, 500, res);
     }
   }
 }

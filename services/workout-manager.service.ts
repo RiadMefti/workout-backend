@@ -71,7 +71,7 @@ class WorkoutManagerService {
       // Create new workout record
       const workoutRecord = new WorkoutRecord({
         user: userId,
-        workout: workout.id,
+        workoutName: workout.workoutName,
         date: new Date(),
         exercises: workout.exercises,
       });
