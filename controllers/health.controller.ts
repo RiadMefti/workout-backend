@@ -5,6 +5,7 @@ import { CreateApiSuccess } from "../utils/helpers";
 class HealthController {
   constructor() {}
 
+  // Ping the server to check if it is running
   public async ping(
     req: Request,
     res: Response,

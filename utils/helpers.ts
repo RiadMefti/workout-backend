@@ -7,12 +7,14 @@ type ControllerFunction = (
   next: NextFunction,
 ) => Promise<void>;
 
+// Va prendre une fonction de contrôleur et la retourner avec un gestionnaire d'erreur qui va catch les erreurs et les passer à next
 export function HandleError(func: ControllerFunction) {
   return (req: Request, res: Response, next: NextFunction) => {
     func(req, res, next).catch(next);
   };
 }
 
+// Va retourner une réponse JSON avec un objet de données et un code de statut SUCCESS
 export function CreateApiSuccess<T>(
   data: T,
   number = 200,
@@ -27,6 +29,8 @@ export function CreateApiSuccess<T>(
   res.status(number).json(response);
 }
 
+
+// Va retourner une réponse JSON avec un objet d'erreur et un code de statut ERROR
 export function CreateApiError(
   message: string,
   number = 500,

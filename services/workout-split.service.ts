@@ -6,37 +6,13 @@ import { User } from "../schemas/user.schema";
 class WorkoutSplitService {
   constructor() {}
 
-  /**
-   * Get all workout splits for a specific user
-   */
+  // Get all workout splits for a user
   public async getWorkoutSplits(userId: string): Promise<WorkoutSplitDTO[]> {
     const splits = await WorkoutSplit.find({ user: userId });
     return splits.map((split) => split.toDTO());
   }
 
-  /**
-   * Get a specific workout split for a user
-   */
-  public async getWorkoutSplit(
-    splitId: string,
-    userId: string
-  ): Promise<WorkoutSplitDTO> {
-    const split = await WorkoutSplit.findOne({
-      _id: splitId,
-      user: userId,
-    });
-
-    if (!split) {
-      throw new Error("Workout split not found");
-    }
-
-    return split.toDTO();
-  }
-
-  /**
-   * Get Active split for a user
-   */
-
+  // Get active split for a user
   public async getActiveSplit(userId: string): Promise<string | null> {
     const user = await User.findById(userId).exec();
 
@@ -47,10 +23,7 @@ class WorkoutSplitService {
     return user.getActiveSplit();
   }
 
-  /**
-   * Set active split for a user
-   */
-
+  // Set active split for a user
   public async setActiveSplit(splitId: string, userId: string): Promise<void> {
     const user = await User.findById(userId);
 
@@ -63,9 +36,7 @@ class WorkoutSplitService {
     return;
   }
 
-  /**
-   * Get next workout index
-   *  */
+  // Get next workout index
   public async getNextWorkoutIndex(userId: string): Promise<number> {
     const user = await User.findById(userId);
 
@@ -76,10 +47,7 @@ class WorkoutSplitService {
     return user.getNextWorkoutIndex();
   }
 
-  /**
-   * Set  next workout index
-   * */
-
+  // Set next workout index
   public async setNextWorkoutIndex(
     userId: string,
     index: number
@@ -96,9 +64,7 @@ class WorkoutSplitService {
     return;
   }
 
-  /**
-   * Create a new workout split
-   */
+  // Get workout by index
   public async createWorkoutSplit(
     data: Omit<WorkoutSplitDTO, "id">,
     userId: string
@@ -112,9 +78,7 @@ class WorkoutSplitService {
     return split.toDTO();
   }
 
-  /**
-   * Edit an existing workout split
-   */
+  // Edit an existing workout split
   public async editWorkoutSplit(
     splitId: string,
     userId: string,
@@ -133,9 +97,7 @@ class WorkoutSplitService {
     return updated;
   }
 
-  /**
-   * Delete an existing workout split
-   */
+  // Delete a workout split
   public async deleteWorkoutSplit(
     splitId: string,
     userId: string

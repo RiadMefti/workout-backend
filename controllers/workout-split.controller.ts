@@ -9,9 +9,7 @@ import {
 class WorkoutSplitController {
   constructor() {}
 
-  /**
-   * Get all workout splits for a user
-   */
+  // Get all the workout splits for the user
   public async getWorkoutSplits(req: Request, res: Response): Promise<void> {
     try {
       const splits = await workoutSplitService.getWorkoutSplits(req.user._id);
@@ -21,10 +19,7 @@ class WorkoutSplitController {
     }
   }
 
-  /**
-   * Get active split for a user
-   */
-
+  // Get a specific workout split for the user
   public async getActiveSplit(req: Request, res: Response): Promise<void> {
     try {
       const activeSplit = await workoutSplitService.getActiveSplit(
@@ -42,10 +37,7 @@ class WorkoutSplitController {
     }
   }
 
-  /**
-   * Set active split for a user
-   */
-
+  // Set a specific workout split as active
   public async setActiveSplit(req: Request, res: Response): Promise<void> {
     try {
       await workoutSplitService.setActiveSplit(
@@ -63,10 +55,7 @@ class WorkoutSplitController {
       CreateApiError("Failed to set active split", 500, res);
     }
   }
-
-  /**
-   * Create a new workout split
-   */
+  // Create a new workout split for the user
   public async createWorkoutSplit(req: Request, res: Response): Promise<void> {
     const result = CreateWorkoutSplitSchema.safeParse(req.body);
 
@@ -85,9 +74,7 @@ class WorkoutSplitController {
     }
   }
 
-  /**
-   * Edit an existing workout split
-   */
+  // Edit an existing workout split
   public async editWorkoutSplit(req: Request, res: Response): Promise<void> {
     const result = UpdateWorkoutSplitSchema.safeParse(req.body);
 
@@ -112,10 +99,7 @@ class WorkoutSplitController {
       CreateApiError("Failed to update workout split", 500, res);
     }
   }
-
-  /**
-   * Delete an existing workout split
-   */
+  // Delete an existing workout split
   public async deleteWorkoutSplit(req: Request, res: Response): Promise<void> {
     try {
       await workoutSplitService.deleteWorkoutSplit(req.params.id, req.user._id);
@@ -134,7 +118,7 @@ class WorkoutSplitController {
       CreateApiError("Failed to delete workout split", 500, res);
     }
   }
-
+  // Get the next workout index for the user
   public async getUserNextWorkoutIndex(
     req: Request,
     res: Response
@@ -152,6 +136,7 @@ class WorkoutSplitController {
     }
   }
 
+  // Increment the next workout index for the user
   public async incrementUserNextWorkoutIndex(
     req: Request,
     res: Response

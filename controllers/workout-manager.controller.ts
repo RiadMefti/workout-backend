@@ -5,6 +5,7 @@ import { createWorkoutRecordSchema } from "../zod/workout-manager.zod";
 import { WorkoutRecordDTO } from "../types/workout.types";
 
 class WorkoutManagerController {
+  // Get all the workout records for the user
   public async getAllUserWorkouts(req: Request, res: Response): Promise<void> {
     try {
       const workouts = await workoutManager.getAllUserWorkouts(req.user._id);
@@ -14,6 +15,7 @@ class WorkoutManagerController {
     }
   }
 
+  // Get a specific workout record for the user
   public async getUserWorkoutById(req: Request, res: Response): Promise<void> {
     try {
       const workout = await workoutManager.getUserWorkoutById(
@@ -32,6 +34,7 @@ class WorkoutManagerController {
     }
   }
 
+  // Create a new workout record for the user
   public async postUserActiveWorkout(
     req: Request,
     res: Response

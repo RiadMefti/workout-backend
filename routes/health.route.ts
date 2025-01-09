@@ -4,6 +4,6 @@ import { healthController } from "../controllers/health.controller";
 
 const router = Router();
 
-router.get("/", HandleError(healthController.ping));
+router.get("/", HandleError(healthController.ping)); //ping the server to check if it is running
 
 export default router;

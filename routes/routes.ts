@@ -7,10 +7,10 @@ import authRoutes from "./auth.route";
 const router = Router();
 
 //all the routes
-router.use("/health", healthRoutes);
-router.use("/auth", authRoutes);
-router.use("/workout", workoutRoutes);
-router.use("/workout-manager", workoutManagerRoutes)
+router.use("/health", healthRoutes); //health route for production to see if the server is up
+router.use("/auth", authRoutes); //auth routes for login and register
+router.use("/workout", workoutRoutes); //workout routes for the workout split
+router.use("/workout-manager", workoutManagerRoutes) //workout manager routes for the workout manager when you do a workout
 // 404 middleware for non-existant routes
 router.use((req: Request) => {
   throw new ApiError(404, "Not Found");

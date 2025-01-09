@@ -1,10 +1,10 @@
 import { WorkoutRecord } from "../schemas/workout-record.schema";
 import { WorkoutRecordDTO } from "../types/workout.types";
-import mongoose from "mongoose";
 
 class WorkoutManagerService {
   constructor() {}
 
+  // Get all workouts for a user in descending order
   public async getAllUserWorkouts(userId: string): Promise<WorkoutRecordDTO[]> {
     try {
       const workoutRecords = await WorkoutRecord.find({ user: userId })
@@ -18,6 +18,7 @@ class WorkoutManagerService {
     }
   }
 
+  // Get a specific workout record by ID
   public async getUserWorkoutById(
     userId: string,
     workoutRecordId: string
@@ -39,36 +40,12 @@ class WorkoutManagerService {
     }
   }
 
-  public async getUserActiveWorkout(userId: string): Promise<WorkoutRecordDTO> {
-    try {
-      // Get the most recent workout record for the user
-      const activeWorkout = await WorkoutRecord.findOne({
-        user: userId,
-        date: {
-          $gte: new Date(new Date().setHours(0, 0, 0, 0)), // Today's records only
-        },
-      })
-        .sort({ date: -1 })
-        .populate("workout", "name description")
-        .exec();
-
-      if (!activeWorkout) {
-        throw new Error("No active workout found");
-      }
-
-      return activeWorkout.toDTO();
-    } catch (error) {
-      console.error("Error fetching active workout:", error);
-      throw new Error("Failed to fetch active workout");
-    }
-  }
-
+  // Post a new workout record for a user
   public async postUserActiveWorkout(
     userId: string,
     workout: WorkoutRecordDTO
   ): Promise<WorkoutRecordDTO> {
     try {
-      // Create new workout record
       const workoutRecord = new WorkoutRecord({
         user: userId,
         workoutName: workout.workoutName,

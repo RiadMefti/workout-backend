@@ -5,8 +5,11 @@ import { authService } from "../services/auth.service";
 class AuthController {
   constructor() {}
 
+
+  // Register a new user and return a JWT token
   public async register(req: Request, res: Response): Promise<void> {
     const { name, email, password } = req.body;
+
 
     const data = await authService.registerUser(name, email, password);
     const jwt = authService.createJWT(data);
@@ -25,6 +28,8 @@ class AuthController {
       res,
     );
   }
+
+  // Login a user and return a JWT token
   public async login(req: Request, res: Response): Promise<void> {
     const { email, password } = req.body;
 

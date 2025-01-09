@@ -1,6 +1,7 @@
 class HealthService {
   constructor() {}
 
+  //check if the server is up 
   public async ping(): Promise<string> {
     return "Pong";
   }

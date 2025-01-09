@@ -1,4 +1,3 @@
-// zod/workoutRecord.zod.ts
 import { z } from "zod";
 
 const exerciseSchema = z.object({

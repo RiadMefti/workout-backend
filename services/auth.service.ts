@@ -6,6 +6,8 @@ class AuthService {
   constructor() {}
 
   key = process.env.JWT_KEY;
+
+  //check if user exists 
   public async userExists(email: string): Promise<boolean> {
     //check in db if user exists
     const user = await User.findOne({
@@ -14,6 +16,7 @@ class AuthService {
     return user ? true : false;
   }
 
+  //login user and return user data
   public async loginUser(email: string, password: string): Promise<UserDTO> {
     const user = await User.findOne({
       email: email,
@@ -26,6 +29,7 @@ class AuthService {
     throw new ApiError(401, "Wrong Credentials");
   }
 
+  //register user and return user data
   public async registerUser(
     name: string,
     email: string,
@@ -53,11 +57,13 @@ class AuthService {
     }
   }
 
+  //hash password using bcrypt
   public async hashPassword(password: string) {
     const hash = await Bun.password.hash(password);
     return hash;
   }
 
+  //create jwt token
   public createJWT(user: UserDTO) {
     if (!this.key) {
       throw new Error("Server Error");
@@ -68,6 +74,7 @@ class AuthService {
     return token;
   }
 
+  //verify jwt token and return if valid
   public verifyJWT(token: string): boolean {
     if (!this.key) {
       throw new Error("Server Error");

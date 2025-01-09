@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 
-//connecting to mongoose client 
+//connecting to mongoose client (pour faire la connexion avec la base de données)
 try {
   const connexion_string = process.env.MONGO_DB || "";
   mongoose.connect(connexion_string, {
@@ -19,6 +19,8 @@ try {
 } catch (err) {
   throw new ApiError(500, "error connecting");
 }
+
+// Use cors to allow cross-origin requests 
 app.use(
   cors({
     origin: "*", // Allow all origins
@@ -26,16 +28,17 @@ app.use(
     allowedHeaders: "*", // Allow all headers
   }),
 );
-// Use morgan to log requests
+// logger middleware pour logger les requêtes
 app.use(logger);
 
-//All the middleware je vais les mettres ici
+//Json middleware pour parser les requêtes en json
 app.use(express.json());
 
-//Les routes
+//Authorization middleware pour vérifier les tokens et qui a accès à quoi
 app.use(Authorization);
 
 app.use(router);
+//Error middleware pour gérer les erreurs
 app.use(ErrorHandler);
 app.listen(port, () => {
   console.log("server started and is listening on port " + port);
