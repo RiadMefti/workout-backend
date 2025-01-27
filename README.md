@@ -1,8 +1,11 @@
-
 # Workout Backend
 
-This is a backend application for managing workout routines, workout splits, and user authentication. It is built using Node.js, Express, MongoDB, and Zod for schema validation.
+This is a backend application for managing workout routines, workout splits, and user authentication. It is built using Node.js, Express, MongoDB, and Zod for schema validation (not all schemas are validated yet). The application uses MinIO for blob storage to handle media files such as progress photos and exercise demonstrations.
 
+## Live Application
+Visit the live application at: [v2.workoutmadeeasy.com](https://v2.workoutmadeeasy.com)
+
+Frontend Repository: [Workout Frontend](https://github.com/RiadMefti/workout-frontend)
 
 ## Installation
 
@@ -25,6 +28,9 @@ Create a `.env` file in the root directory and add the following environment var
 PORT=8080
 MONGO_DB=your_mongodb_connection_string
 JWT_KEY=your_jwt_secret_key
+MINIO_ACCESS_KEY=your_minio_access_key
+MINIO_SECRET_KEY=your_minio_secret_key
+MINIO_API_URL=your_minio_api_url
 ```
 
 ## Running the Application
@@ -60,6 +66,11 @@ The server will start on the port specified in the `.env` file (default is 8080)
 - `GET /workout-manager` - Get all workout records for the user
 - `GET /workout-manager/:id` - Get a specific workout record for the user
 - `POST /workout-manager/active-workout` - Create a new workout record for the user
+
+### Media Storage (MinIO)
+- `POST /storage/upload` - Upload media files
+- `GET /storage/file/:id` - Retrieve media files
+- `DELETE /storage/file/:id` - Delete media files
 
 ## Project Structure
 
@@ -107,4 +118,16 @@ workout-backend/
     └── workout-split.zod.ts
 ```
 
+## Features
 
+- User authentication and authorization
+- Workout split management
+- Workout tracking and progress monitoring
+- Media file storage using MinIO for:
+  - Progress photos
+  - Exercise demonstration videos
+  - Workout-related attachments
+- Secure file upload and retrieval
+- JWT-based authentication
+- TypeScript support
+- Zod schema validation
