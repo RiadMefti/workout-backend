@@ -69,7 +69,7 @@ class AuthService {
       throw new Error("Server Error");
     }
     const token = jwt.sign(user, this.key, {
-      expiresIn: 7200,
+      expiresIn: 31536000,
     });
     return token;
   }
