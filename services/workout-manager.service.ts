@@ -85,7 +85,7 @@ class WorkoutManagerService {
     if (!user) throw new Error("User not found");
     if (!Array.isArray(user.connections)) user.connections = [];
     const users = await User.find({ email: { $in: user.connections } });
-    return users.map((u: any) => u.toDTO());
+    return users.map((u) => u.toDTO());
   }
 
   // Get all workouts for a connection (if in list)

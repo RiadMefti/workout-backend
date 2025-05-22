@@ -10,7 +10,7 @@ class WorkoutManagerController {
     try {
       const workouts = await workoutManager.getAllUserWorkouts(req.user._id);
       CreateApiSuccess(workouts, 200, res);
-    } catch (error) {
+    } catch (error: unknown) {
       CreateApiError("Failed to fetch workout records", 500, res);
     }
   }
@@ -23,7 +23,7 @@ class WorkoutManagerController {
         req.params.id
       );
       CreateApiSuccess(workout, 200, res);
-    } catch (error) {
+    } catch (error: unknown) {
       if (
         error instanceof Error &&
         error.message === "Workout record not found"
@@ -51,8 +51,12 @@ class WorkoutManagerController {
         req.body.workoutRecord
       );
       CreateApiSuccess(workoutRecord, 201, res);
-    } catch (error: any) {
-      CreateApiError(error.message, 500, res);
+    } catch (error: unknown) {
+      CreateApiError(
+        error instanceof Error ? error.message : "Failed to create workout record",
+        500,
+        res
+      );
     }
   }
 
@@ -64,8 +68,12 @@ class WorkoutManagerController {
         req.body.email
       );
       CreateApiSuccess(connections, 200, res);
-    } catch (error: any) {
-      CreateApiError(error.message, 400, res);
+    } catch (error: unknown) {
+      CreateApiError(
+        error instanceof Error ? error.message : "Failed to add connection",
+        400,
+        res
+      );
     }
   }
 
@@ -74,8 +82,12 @@ class WorkoutManagerController {
     try {
       const connections = await workoutManager.getConnections(req.user._id);
       CreateApiSuccess(connections, 200, res);
-    } catch (error: any) {
-      CreateApiError(error.message, 400, res);
+    } catch (error: unknown) {
+      CreateApiError(
+        error instanceof Error ? error.message : "Failed to fetch connections",
+        400,
+        res
+      );
     }
   }
 
@@ -90,8 +102,12 @@ class WorkoutManagerController {
         req.params.email
       );
       CreateApiSuccess(workouts, 200, res);
-    } catch (error: any) {
-      CreateApiError(error.message, 400, res);
+    } catch (error: unknown) {
+      CreateApiError(
+        error instanceof Error ? error.message : "Failed to fetch connection workouts",
+        400,
+        res
+      );
     }
   }
 }

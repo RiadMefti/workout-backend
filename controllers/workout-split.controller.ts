@@ -26,14 +26,16 @@ class WorkoutSplitController {
         req.user._id
       );
       CreateApiSuccess(activeSplit, 200, res);
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof Error && error.message === "User not found") {
         return CreateApiError("User not found", 404, res);
       }
-
-      console.log(error.message);
-
-      CreateApiError(error.message as string, 500, res);
+      if (error instanceof Error) {
+        console.log(error.message);
+        CreateApiError(error.message, 500, res);
+      } else {
+        CreateApiError("Failed to fetch active split", 500, res);
+      }
     }
   }
 
