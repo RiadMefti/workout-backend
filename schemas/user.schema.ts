@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
     profile_picture: { type: String, default: "default" },
     active_split: { type: String, default: "" },
     next_workout_index: { type: Number, default: 0 },
+    connections: [{ type: String, ref: "User" }], // List of connected user emails
   },
   {
     methods: {

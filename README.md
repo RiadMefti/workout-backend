@@ -66,6 +66,11 @@ The server will start on the port specified in the `.env` file (default is 8080)
 - `GET /workout-manager` - Get all workout records for the user
 - `GET /workout-manager/:id` - Get a specific workout record for the user
 - `POST /workout-manager/active-workout` - Create a new workout record for the user
+- View other users' workout history by adding them via email to your connections list.
+- New Endpoints:
+  - `POST /workout-manager/connections` — Add a user to your connections by email (body: `{ email: string }`)
+  - `GET /workout-manager/connections` — Get your list of connections
+  - `GET /workout-manager/connections/:email/workouts` — Get all workouts for a connection (by email, only if added)
 
 ### Media Storage (MinIO)
 - `POST /storage/upload` - Upload media files

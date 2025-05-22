@@ -55,6 +55,45 @@ class WorkoutManagerController {
       CreateApiError(error.message, 500, res);
     }
   }
+
+  // Add a user to your connections by email
+  public async addConnection(req: Request, res: Response): Promise<void> {
+    try {
+      const connections = await workoutManager.addConnection(
+        req.user._id,
+        req.body.email
+      );
+      CreateApiSuccess(connections, 200, res);
+    } catch (error: any) {
+      CreateApiError(error.message, 400, res);
+    }
+  }
+
+  // Get all your connections
+  public async getConnections(req: Request, res: Response): Promise<void> {
+    try {
+      const connections = await workoutManager.getConnections(req.user._id);
+      CreateApiSuccess(connections, 200, res);
+    } catch (error: any) {
+      CreateApiError(error.message, 400, res);
+    }
+  }
+
+  // Get all workouts for a connection (by email)
+  public async getConnectionWorkouts(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const workouts = await workoutManager.getConnectionWorkouts(
+        req.user._id,
+        req.params.email
+      );
+      CreateApiSuccess(workouts, 200, res);
+    } catch (error: any) {
+      CreateApiError(error.message, 400, res);
+    }
+  }
 }
 
 export const workoutManagerController = new WorkoutManagerController();

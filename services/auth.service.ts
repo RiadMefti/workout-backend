@@ -7,7 +7,7 @@ class AuthService {
 
   key = process.env.JWT_KEY;
 
-  //check if user exists 
+  //check if user exists
   public async userExists(email: string): Promise<boolean> {
     //check in db if user exists
     const user = await User.findOne({
@@ -33,7 +33,7 @@ class AuthService {
   public async registerUser(
     name: string,
     email: string,
-    password: string,
+    password: string
   ): Promise<UserDTO> {
     if (await this.userExists(email)) {
       throw new ApiError(409, "Email already in use");
@@ -45,6 +45,7 @@ class AuthService {
         name,
         email,
         hashed_password,
+        connections: [], // Always initialize connections as an empty array
       });
 
       user_db.save();
@@ -52,7 +53,7 @@ class AuthService {
     } catch (err) {
       throw new ApiError(
         500,
-        "An error occureed while creating your account please retry",
+        "An error occureed while creating your account please retry"
       );
     }
   }
